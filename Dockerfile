@@ -1,15 +1,18 @@
-FROM alpine:3.4
-MAINTAINER UmVnaXN0ZXIgcmVnaXN0ZXJkZWRpY2F0ZWQrZG9ja2VyKGF0KWdtYWlsLmNvbQo=
+FROM alpine
+MAINTAINER rob@robtimmer.com
 
+# Arguments
 ARG PUREFTPD_VERSION=1.0.43
 ARG URL=http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-$PUREFTPD_VERSION.tar.gz
 
+# Environment variables
 ENV PUBLIC_HOST         localhost
 ENV MIN_PASV_PORT       30000
 ENV MAX_PASV_PORT       30009
 ENV UID                 1000
 ENV GID                 1000
 
+# Install Pure-FTPd
 RUN set -ex && \
     apk add --no-cache --virtual .build-deps \
                                 build-base \
@@ -34,14 +37,17 @@ RUN set -ex && \
     apk del .build-deps && \
     mkdir /etc/pureftpd
 
+# Add entrypoint script
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 
+# Volumes
 VOLUME /home/ftpuser /etc/pureftpd
 
+# Exposed ports
 EXPOSE 21 $MIN_PASV_PORT-$MAX_PASV_PORT
 
+# Start Pure-FTPd with parameters
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
-
 CMD /usr/sbin/pure-ftpd \
                         -P $PUBLIC_HOST \
                         -p $MIN_PASV_PORT:$MAX_PASV_PORT \

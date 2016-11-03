@@ -1,5 +1,3 @@
-![](https://img.shields.io/badge/Pure--FTPd-1.0.42-brightgreen.svg) ![](https://img.shields.io/badge/Alpine-3.4-brightgreen.svg) ![](https://img.shields.io/docker/stars/gists/pure-ftpd.svg) ![](https://img.shields.io/docker/pulls/gists/pure-ftpd.svg)
-
 #### Volume
 
 - /home/ftpuser
@@ -24,14 +22,14 @@
         -p 30000-30009:30000-30009 \
         -v $(pwd)/pureftpd:/etc/pureftpd \
         -v /your/data:/home/ftpuser \
-        gists/pure-ftpd
+        robtimmer/pure-ftpd
 
 **since docker version 1.5 ports can be exported in range**
 
 #### Compose example:
 
     pure-ftpd:
-      image: gists/pure-ftpd
+      image: robtimmer/pure-ftpd
       container_name: pure-ftpd
       ports:
         - "21:21"
